@@ -1,5 +1,7 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild, ViewContainerRef } from '@angular/core';
 import { Recipe } from '../models/recipe.interface';
+import { RecipeEditComponent } from './recipe-edit/recipe-edit.component';
+import { RecipeViewComponent } from './recipe-view/recipe-view.component';
 
 @Component({
   selector: 'app-recipe-details',
@@ -24,7 +26,15 @@ export class RecipeDetailsComponent implements OnChanges, AfterViewInit {
     this.loadRecipeComponent();
   }
 
-  private loadRecipeComponent(edit: boolean = true): void {
-    // TODO: Implement this function
+  private loadRecipeComponent(edit: boolean = true, recipe?: Recipe): void {
+    if (edit) {
+      this.recipeComponentContainer.clear();
+      const editRecipeCompRef = this.recipeComponentContainer.createComponent(RecipeEditComponent);
+      editRecipeCompRef.instance.recipe = recipe;
+    } else {
+      this.recipeComponentContainer.clear();
+      const viewRecipeCompRef = this.recipeComponentContainer.createComponent(RecipeViewComponent);
+      viewRecipeCompRef.instance.edit.subscribe(() => this.loadRecipeComponent(true, this.recipe));
+    }
   }
 }

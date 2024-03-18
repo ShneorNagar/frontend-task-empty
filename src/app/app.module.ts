@@ -21,13 +21,17 @@ import { AppComponent } from './app.component';
 import { RecipesComponent } from './recipes/recipes.component';
 import { RecipeCardComponent } from './recipe-card/recipe-card.component';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
+import { RecipeEditComponent } from './recipe-details/recipe-edit/recipe-edit.component';
+import { RecipeViewComponent } from './recipe-details/recipe-view/recipe-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     RecipesComponent,
     RecipeCardComponent,
-    RecipeDetailsComponent
+    RecipeDetailsComponent,
+    RecipeEditComponent,
+    RecipeViewComponent
   ],
   imports: [
     BrowserModule,

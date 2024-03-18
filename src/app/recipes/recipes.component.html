@@ -1,39 +1,51 @@
 <mat-sidenav-container class="recipes__drawer-container" hasBackdrop="false">
+  <mat-sidenav
+    class="recipes__sidenav-container"
+    #sidenav
+    mode="over"
+    position="end"
+  >
+    <app-recipe-details
+      [recipe]="selectedRecipe"
+      (close)="sidenav.close()"
+    ></app-recipe-details>
+  </mat-sidenav>
 
-    <mat-sidenav class="recipes__sidenav-container" #sidenav mode="over" position="end">
+  <mat-sidenav-content class="recipes__drawer-content">
+    <h1 class="recipes__title">Recipes</h1>
 
-        <app-recipe-details [recipe]="selectedRecipe" (close)="sidenav.close()"></app-recipe-details>
+    <div class="recipes__toggle-btn">
+      <input
+        type="checkbox"
+        id="toggle"
+        [formControl]="showOnlyFavoritesCtrl"
+        class="recipes__toggle-checkbox"
+      />
 
-    </mat-sidenav>
-
-    <mat-sidenav-content class="recipes__drawer-content">
-        
-        <h1 class="recipes__title">Recipes</h1>
-
-        <div class="recipes__toggle-btn">
-            <input type="checkbox" id="toggle" [formControl]="showOnlyFavoritesCtrl" 
-                class="recipes__toggle-checkbox" />
-
-            <label for="toggle" class="recipes__toggle-container">
-                <div class="recipes__toggle-option">All</div> 
-                <div class="recipes__toggle-option">
-                    <svg class="recipes__favorite-svg">
-                        <use xlink:href="../../assets/sprite.svg#icon-favorite"></use>
-                    </svg>
-                    Favorites
-                </div>
-            </label>
+      <label for="toggle" class="recipes__toggle-container">
+        <div class="recipes__toggle-option">All</div>
+        <div class="recipes__toggle-option">
+          <svg class="recipes__favorite-svg">
+            <use xlink:href="../../assets/sprite.svg#icon-favorite"></use>
+          </svg>
+          Favorites
         </div>
+      </label>
+    </div>
 
-        <button class="recipes__add-btn primary" (click)="addRecipe()">
-            <svg class="recipes__add-svg">
-                <use xlink:href="../../assets/sprite.svg#icon-add"></use>
-            </svg>
-            New recipe
-        </button>
+    <button class="recipes__add-btn primary" (click)="addRecipe()">
+      <svg class="recipes__add-svg">
+        <use xlink:href="../../assets/sprite.svg#icon-add"></use>
+      </svg>
+      New recipe
+    </button>
 
-        <h1>Show list of recipes here</h1>
-
-    </mat-sidenav-content>
-
+    <div class="recipes__container" *ngIf="recipes().length">
+      <app-recipe-card
+        *ngFor="let recipe of recipes()"
+        [recipe]="recipe"
+        (click)="openRecipe(recipe)"
+      ></app-recipe-card>
+    </div>
+  </mat-sidenav-content>
 </mat-sidenav-container>

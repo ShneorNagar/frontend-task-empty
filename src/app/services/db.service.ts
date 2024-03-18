@@ -1,7 +1,7 @@
 import { Injectable, inject } from "@angular/core";
 import { collectionData, Firestore } from "@angular/fire/firestore";
 import { doc, deleteDoc, collection, addDoc, updateDoc } from "firebase/firestore";
-import { EMPTY, first, from, Observable, switchMap, tap } from "rxjs";
+import { catchError, EMPTY, first, from, Observable, switchMap, tap } from "rxjs";
 
 import { Recipe } from "../models/recipe.interface";
 
@@ -16,7 +16,11 @@ export class DatabaseService {
         
         return recipes$.pipe(
             first(),
-            tap(recipes => console.log(`Recipes:`, recipes))
+            tap(recipes => console.log(`Recipes:`, recipes)),
+            catchError(error => {
+                console.error('Error getting recipes:', error);
+                return EMPTY;
+            })
         );
     }
 
@@ -26,7 +30,11 @@ export class DatabaseService {
         return from(addDoc(collection(this.firestore, 'recipes'), <Recipe>{ ...recipe })).pipe(
             tap(docRef => console.log(`Added a new recipe with ID: ${docRef.id}`)),
             switchMap(docRef => updateDoc(doc(this.firestore, "recipes", docRef.id), { ... recipe, id: docRef.id })),
-            first()
+            first(),
+            catchError(error => {
+                console.error('Error adding recipe:', error);
+                return EMPTY;
+            })
         );
     }
 
@@ -35,7 +43,11 @@ export class DatabaseService {
 
         return from(updateDoc(doc(this.firestore, "recipes", id), { ... recipe })).pipe(
             first(),
-            tap(() => console.log(`Updated recipe with ID: ${id}`))
+            tap(() => console.log(`Updated recipe with ID: ${id}`)),
+            catchError(error => {
+                console.error(`Error updating recipe with ID: ${id}`, error);
+                return EMPTY;
+            })
         );
     }
 
@@ -44,7 +56,11 @@ export class DatabaseService {
 
         return from(deleteDoc(doc(this.firestore, "recipes", id))).pipe(
             first(),
-            tap(() => console.log(`Removed recipe with ID: ${id}`))
+            tap(() => console.log(`Removed recipe with ID: ${id}`)),
+            catchError(error => {
+                console.error(`Error removing recipe with ID: ${id}`, error);
+                return EMPTY;
+            })
         );
     }
 }
