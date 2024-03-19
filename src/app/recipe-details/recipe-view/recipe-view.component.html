@@ -5,7 +5,7 @@
   <div class="recipe-data">
     <div class="recipe-header">
       <h1 class="recipe-title">{{ recipe.name }}</h1>
-      <button class="lrecipe-like-unlike-btn">Like/Unlike</button
+      <button class="lrecipe-like-unlike-btn" (click)="onLikeToggleClick()">{{likeToggle() ? 'Unlike' : 'Like'}}</button
       ><button class="recipe-edit-btn" (click)="onEdit()">Edit</button>
     </div>
     <div class="recipe-author"></div>
