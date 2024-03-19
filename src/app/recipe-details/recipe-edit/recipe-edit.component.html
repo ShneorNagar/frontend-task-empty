@@ -1,4 +1,42 @@
-<p>recipe-edit works!</p>
-<ng-container *ngIf="recipe">
-  {{ recipe | json }}
-</ng-container>
+<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+  <label for="name">Name</label>
+  <input type="text" formControlName="name">
+
+  <label for="style">Style</label>
+  <select formControlName="style" id="style">
+    <option *ngFor="let option of cookingEnumOptions" [value]="option">{{ option }}</option>
+  </select>
+
+  <label for="time">Time</label>
+  <input type="number" formControlName="time">
+
+  <label for="author">Author</label>
+  <input type="text" formControlName="author">
+
+  <label for="image">Image</label>
+  <input type="text" formControlName="image">
+
+  <label for="favorite">Favorite</label>
+  <input type="checkbox" formControlName="favorite">
+
+  <label for="notes">Notes</label>
+  <textarea formControlName="notes" id="notes" rows="5"></textarea>
+
+  <div formArrayName="ingredients">
+    <label>Ingredients</label>
+    <div *ngFor="let ingredient of ingredientForms.controls; let i = index" [formGroupName]="i">
+      <input type="text" formControlName="ingredient">
+    </div>
+    <button type="button" (click)="addIngredient()">Add Ingredient</button>
+  </div>
+
+  <div formArrayName="instructions">
+    <label>Instructions</label>
+    <div *ngFor="let instruction of instructionForms.controls; let i = index" [formGroupName]="i">
+      <input type="text" formControlName="instruction">
+    </div>
+    <button type="button" (click)="addInstruction()">Add Instruction</button>
+  </div>
+
+  <button type="submit">Submit</button>
+</form>

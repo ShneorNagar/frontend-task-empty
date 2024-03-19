@@ -1,2 +1,28 @@
-<p>recipe-view works!</p>
-<button (click)="onEdit()">edit</button>
+<ng-container *ngIf="recipe">
+  <div class="recipe-image">
+    <img [src]="recipe.image" alt="recipe-image" />
+  </div>
+  <div class="recipe-data">
+    <div class="recipe-header">
+      <h1 class="recipe-title">{{ recipe.name }}</h1>
+      <button class="lrecipe-like-unlike-btn">Like/Unlike</button
+      ><button class="recipe-edit-btn" (click)="onEdit()">Edit</button>
+    </div>
+    <div class="recipe-author"></div>
+    <div class="recipe-details"></div>
+    <div class="recipe-subtitle">Notes</div>
+    <div class="recipe-notes">{{ recipe.notes }}</div>
+    <div class="recipe-subtitle">Ingredients</div>
+    <ul class="recipe-ingredients">
+      <li *ngFor="let ingredient of recipe.ingredients">
+        {{ ingredient }}
+      </li>
+    </ul>
+    <div class="recipe-subtitle">Instructions</div>
+    <ol class="recipe-instructions">
+      <li *ngFor="let instruction of recipe.instructions">
+        {{ instruction }}
+      </li>
+    </ol>
+  </div>
+</ng-container>

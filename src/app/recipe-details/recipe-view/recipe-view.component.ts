@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Recipe } from 'src/app/models/recipe.interface';
 
 @Component({
   selector: 'app-recipe-view',
@@ -7,7 +8,7 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class RecipeViewComponent {
 
-
+  @Input() recipe: Recipe | undefined;
   @Output() edit = new EventEmitter();
 
   onEdit() {
