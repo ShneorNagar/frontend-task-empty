@@ -59,6 +59,21 @@ export class RecipeEditComponent {
 
     if (this.recipe) {
       this.recipeForm.patchValue(this.recipe);
+      this.recipe.ingredients.forEach((ing) => {
+        this.ingredientForms.push(
+          this.formBuilder.group({
+            ingredient: ing,
+          })
+        );
+      });
+
+      this.recipe.instructions.forEach((inst) => {
+        this.instructionForms.push(
+          this.formBuilder.group({
+            instruction: inst,
+          })
+        );
+      });
     }
   }
 
