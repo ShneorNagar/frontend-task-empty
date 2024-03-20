@@ -78,19 +78,19 @@
             }
 
             div:last-child {
-                color: #41A4FF;
+                color: var(--btn-bg-color);
                 font-weight: bold;
                 transition: all 0.3s;
 
                 svg {
-                    fill: #41A4FF;
+                    fill: var(--btn-bg-color);
                 }
             }
         }
 
         + .recipes__toggle-container {
             div:first-child {
-                color: #41A4FF;
+                color: var(--btn-bg-color);
                 font-weight: bold;
                 transition: all 0.3s;
             }

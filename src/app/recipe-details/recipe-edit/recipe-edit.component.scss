@@ -1,3 +1,79 @@
+@import "../../../styles.scss";
+
+h1 {
+  font-family: var(--font-poppins);
+  font-size: 3rem;
+  margin: 32px 32px 40px 32px;
+}
+
+.recipe-edit-form {
+  padding: 0 32px;
+}
+
+.form-controls-group {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.form-control {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.add-form-control-btn {
+  @include strokeBtn;
+}
+
+.form-control-array-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.form-control-array-label {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.form-control-array-list {
+  list-style-type: none;
+}
+
+.form-control-array-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+}
+
 #notes {
-    resize: none;
+  resize: none;
+}
+
+.form-footer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  background: #f6f7f9;
+  box-shadow: 0 1px #7552f621 inset;
+  padding: 1.6rem 3.2rem;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.submit-btn {
+  @include fillBtn();
+  width: 126px;
+  font-weight: 400;
 }

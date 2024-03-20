@@ -1,42 +1,125 @@
-<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
-  <label for="name">Name</label>
-  <input type="text" formControlName="name">
+<h1>New recipe</h1>
 
-  <label for="style">Style</label>
-  <select formControlName="style" id="style">
-    <option *ngFor="let option of cookingEnumOptions" [value]="option">{{ option }}</option>
-  </select>
-
-  <label for="time">Time</label>
-  <input type="number" formControlName="time">
-
-  <label for="author">Author</label>
-  <input type="text" formControlName="author">
-
-  <label for="image">Image</label>
-  <input type="text" formControlName="image">
-
-  <label for="favorite">Favorite</label>
-  <input type="checkbox" formControlName="favorite">
-
-  <label for="notes">Notes</label>
-  <textarea formControlName="notes" id="notes" rows="5"></textarea>
-
-  <div formArrayName="ingredients">
-    <label>Ingredients</label>
-    <div *ngFor="let ingredient of ingredientForms.controls; let i = index" [formGroupName]="i">
-      <input type="text" formControlName="ingredient">
+<form class="recipe-edit-form" [formGroup]="recipeForm">
+  <div class="form-controls-group">
+    <div>
+      <label for="name">Name</label>
+      <input type="text" formControlName="name" placeholder="Dish name" />
     </div>
-    <button type="button" (click)="addIngredient()">Add Ingredient</button>
+
+    <div>
+      <label for="style">Style</label>
+      <select formControlName="style" id="style">
+        <option *ngFor="let option of cookingEnumOptions" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+    </div>
   </div>
 
-  <div formArrayName="instructions">
-    <label>Instructions</label>
-    <div *ngFor="let instruction of instructionForms.controls; let i = index" [formGroupName]="i">
-      <input type="text" formControlName="instruction">
+  <div class="form-controls-group">
+    <div>
+      <label for="author">Author</label>
+      <input type="text" formControlName="author" placeholder="Jon doe" />
     </div>
-    <button type="button" (click)="addInstruction()">Add Instruction</button>
+
+    <div>
+      <label for="time">Time (minutes)</label>
+      <input type="number" formControlName="time" />
+    </div>
   </div>
 
-  <button type="submit">Submit</button>
+  <div class="form-control">
+    <label for="image">Image</label>
+    <input
+      type="text"
+      formControlName="image"
+      placeholder="https://image-url.com"
+    />
+  </div>
+
+  <div class="form-control">
+    <label for="notes">Notes</label>
+    <textarea
+      formControlName="notes"
+      id="notes"
+      rows="5"
+      placeholder="Your notes here..."
+    ></textarea>
+  </div>
+
+  <div class="form-control" formArrayName="ingredients">
+    <div class="form-control-array-header">
+      <label>Ingredients</label>
+      <button
+        class="add-form-control-btn"
+        type="button"
+        (click)="addIngredient()"
+      >
+        <ng-container [ngTemplateOutlet]="addBtnIcon"></ng-container>
+      </button>
+    </div>
+    <ul class="form-control-array-list">
+      <li
+        *ngFor="let ingredient of ingredientForms.controls; let i = index"
+        [formGroupName]="i"
+        class="form-control-array-item"
+      >
+        <input type="text" formControlName="ingredient" />
+        <div (click)="removeIngredient(i)">
+          <ng-container [ngTemplateOutlet]="trashIcon"></ng-container>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="form-control" formArrayName="instructions">
+    <div class="form-control-array-header">
+      <label class="form-control-array-label">Instructions</label>
+      <button
+        class="add-form-control-btn"
+        type="button"
+        (click)="addInstruction()"
+      >
+        <ng-container [ngTemplateOutlet]="addBtnIcon"></ng-container>
+      </button>
+    </div>
+    <ul class="form-control-array-list">
+      <li
+        *ngFor="let instruction of instructionForms.controls; let i = index"
+        [formGroupName]="i"
+        class="form-control-array-item"
+      >
+        <input type="text" formControlName="instruction" />
+        <div (click)="removeInstruction(i)">
+          <ng-container [ngTemplateOutlet]="trashIcon"></ng-container>
+        </div>
+      </li>
+    </ul>
+  </div>
 </form>
+
+<footer class="form-footer">
+  <button class="primary" type="submit" (click)="onSubmit()">Save</button>
+  <button *ngIf="editMode" class="tertiary" (click)="onDeleteRecipe()">
+    Delete recipe
+  </button>
+</footer>
+
+<ng-template #trashIcon>
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path
+      d="M4.92725 3.40625V2.1416C4.92725 1.62663 5.08447 1.22103 5.39893 0.924805C5.71794 0.624023 6.15088 0.473633 6.69775 0.473633H9.28857C9.83545 0.473633 10.2661 0.624023 10.5806 0.924805C10.8996 1.22103 11.0591 1.62663 11.0591 2.1416V3.40625H9.82861V2.20996C9.82861 2.03678 9.77393 1.89779 9.66455 1.79297C9.55518 1.68815 9.40706 1.63574 9.22021 1.63574H6.77295C6.5861 1.63574 6.43799 1.68815 6.32861 1.79297C6.21924 1.89779 6.16455 2.03678 6.16455 2.20996V3.40625H4.92725ZM1.89209 4.21973C1.75537 4.21973 1.6346 4.1696 1.52979 4.06934C1.42952 3.96452 1.37939 3.84147 1.37939 3.7002C1.37939 3.56348 1.42952 3.44499 1.52979 3.34473C1.6346 3.23991 1.75537 3.1875 1.89209 3.1875H14.1079C14.2492 3.1875 14.37 3.23763 14.4702 3.33789C14.5705 3.43815 14.6206 3.55892 14.6206 3.7002C14.6206 3.84147 14.5705 3.96452 14.4702 4.06934C14.37 4.1696 14.2492 4.21973 14.1079 4.21973H1.89209ZM13.0894 4.07617L12.645 14.207C12.6268 14.6309 12.4946 14.9567 12.2485 15.1846C12.007 15.4124 11.6743 15.5264 11.2505 15.5264H4.74951C4.33024 15.5264 3.99756 15.4124 3.75146 15.1846C3.50993 14.9567 3.38005 14.6309 3.36182 14.207L2.91748 4.07617H13.0894ZM5.83643 13.5713C5.96859 13.5713 6.0734 13.5348 6.15088 13.4619C6.22835 13.3844 6.26481 13.2865 6.26025 13.168L6.05518 5.7168C6.05062 5.59831 6.00732 5.5026 5.92529 5.42969C5.84782 5.35677 5.74984 5.32031 5.63135 5.32031C5.49919 5.32031 5.39437 5.35905 5.31689 5.43652C5.23942 5.50944 5.20068 5.60514 5.20068 5.72363L5.4126 13.168C5.4126 13.291 5.45133 13.389 5.52881 13.4619C5.61084 13.5348 5.71338 13.5713 5.83643 13.5713ZM8.00342 13.5713C8.13102 13.5713 8.23584 13.5348 8.31787 13.4619C8.3999 13.3844 8.44092 13.2865 8.44092 13.168V5.72363C8.44092 5.60514 8.3999 5.50944 8.31787 5.43652C8.23584 5.35905 8.13102 5.32031 8.00342 5.32031C7.87126 5.32031 7.76416 5.35905 7.68213 5.43652C7.6001 5.50944 7.55908 5.60514 7.55908 5.72363V13.168C7.55908 13.2865 7.6001 13.3844 7.68213 13.4619C7.76416 13.5348 7.87126 13.5713 8.00342 13.5713ZM10.1636 13.5713C10.2866 13.5713 10.3869 13.5348 10.4644 13.4619C10.5464 13.389 10.5874 13.291 10.5874 13.168L10.7993 5.72363C10.7993 5.60514 10.7606 5.50944 10.6831 5.43652C10.6056 5.35905 10.5008 5.32031 10.3687 5.32031C10.2502 5.32031 10.1499 5.35677 10.0679 5.42969C9.9904 5.5026 9.94938 5.60059 9.94482 5.72363L9.73975 13.168C9.73519 13.2865 9.77165 13.3844 9.84912 13.4619C9.92659 13.5348 10.0314 13.5713 10.1636 13.5713Z"
+      fill="#E86161"
+    />
+  </svg>
+</ng-template>
+
+<ng-template #addBtnIcon>
+  <svg width="35" height="12" viewBox="0 0 35 12" fill="none">
+    <path
+      d="M4.56481 2.838V5.827H7.41381V6.772H4.56481V9.782H3.54281V6.772H0.707813V5.827H3.54281V2.838H4.56481ZM20.3069 11H19.2569C19.1356 11 19.0376 10.9697 18.9629 10.909C18.8883 10.8483 18.8323 10.7713 18.7949 10.678L17.8569 8.256H13.3559L12.4179 10.678C12.3853 10.762 12.3293 10.8367 12.2499 10.902C12.1706 10.9673 12.0726 11 11.9559 11H10.9059L14.9169 0.968999H16.2959L20.3069 11ZM13.7339 7.276H17.4789L15.9039 3.195C15.8013 2.943 15.7009 2.628 15.6029 2.25C15.5516 2.44133 15.5003 2.61867 15.4489 2.782C15.4023 2.94067 15.3556 3.08067 15.3089 3.202L13.7339 7.276ZM26.3646 11C26.1872 11 26.0752 10.9137 26.0286 10.741L25.9166 9.88C25.6132 10.2487 25.2656 10.545 24.8736 10.769C24.4862 10.9883 24.0406 11.098 23.5366 11.098C23.1306 11.098 22.7619 11.021 22.4306 10.867C22.0992 10.7083 21.8169 10.4773 21.5836 10.174C21.3502 9.87067 21.1706 9.49267 21.0446 9.04C20.9186 8.58733 20.8556 8.067 20.8556 7.479C20.8556 6.95633 20.9256 6.471 21.0656 6.023C21.2056 5.57033 21.4062 5.17833 21.6676 4.847C21.9336 4.51567 22.2556 4.25667 22.6336 4.07C23.0116 3.87867 23.4409 3.783 23.9216 3.783C24.3556 3.783 24.7266 3.85767 25.0346 4.007C25.3426 4.15167 25.6179 4.357 25.8606 4.623V0.689H27.1066V11H26.3646ZM23.9496 10.09C24.3556 10.09 24.7102 9.99667 25.0136 9.81C25.3216 9.62333 25.6039 9.35967 25.8606 9.019V5.589C25.6319 5.281 25.3799 5.06633 25.1046 4.945C24.8339 4.819 24.5329 4.756 24.2016 4.756C23.5389 4.756 23.0302 4.99167 22.6756 5.463C22.3209 5.93433 22.1436 6.60633 22.1436 7.479C22.1436 7.941 22.1832 8.33767 22.2626 8.669C22.3419 8.99567 22.4586 9.26633 22.6126 9.481C22.7666 9.691 22.9556 9.845 23.1796 9.943C23.4036 10.041 23.6602 10.09 23.9496 10.09ZM34.1849 11C34.0075 11 33.8955 10.9137 33.8489 10.741L33.7369 9.88C33.4335 10.2487 33.0859 10.545 32.6939 10.769C32.3065 10.9883 31.8609 11.098 31.3569 11.098C30.9509 11.098 30.5822 11.021 30.2509 10.867C29.9195 10.7083 29.6372 10.4773 29.4039 10.174C29.1705 9.87067 28.9909 9.49267 28.8649 9.04C28.7389 8.58733 28.6759 8.067 28.6759 7.479C28.6759 6.95633 28.7459 6.471 28.8859 6.023C29.0259 5.57033 29.2265 5.17833 29.4879 4.847C29.7539 4.51567 30.0759 4.25667 30.4539 4.07C30.8319 3.87867 31.2612 3.783 31.7419 3.783C32.1759 3.783 32.5469 3.85767 32.8549 4.007C33.1629 4.15167 33.4382 4.357 33.6809 4.623V0.689H34.9269V11H34.1849ZM31.7699 10.09C32.1759 10.09 32.5305 9.99667 32.8339 9.81C33.1419 9.62333 33.4242 9.35967 33.6809 9.019V5.589C33.4522 5.281 33.2002 5.06633 32.9249 4.945C32.6542 4.819 32.3532 4.756 32.0219 4.756C31.3592 4.756 30.8505 4.99167 30.4959 5.463C30.1412 5.93433 29.9639 6.60633 29.9639 7.479C29.9639 7.941 30.0035 8.33767 30.0829 8.669C30.1622 8.99567 30.2789 9.26633 30.4329 9.481C30.5869 9.691 30.7759 9.845 30.9999 9.943C31.2239 10.041 31.4805 10.09 31.7699 10.09Z"
+      fill="#118AF9"
+    />
+  </svg>
+</ng-template>

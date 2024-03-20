@@ -43,7 +43,7 @@ export class RecipeDetailsComponent implements OnChanges, AfterViewInit {
       const editRecipeCompRef =
         this.recipeComponentContainer.createComponent(RecipeEditComponent);
       editRecipeCompRef.instance.recipe = this.recipe;
-      editRecipeCompRef.instance.onRecipeSaved.subscribe(() =>
+      editRecipeCompRef.instance.onClose.subscribe(() =>
         this.close.emit()
       );
     } else {

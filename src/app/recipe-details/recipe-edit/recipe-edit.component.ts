@@ -23,8 +23,9 @@ import { DatabaseService } from "src/app/services/db.service";
 })
 export class RecipeEditComponent {
   @Input() recipe: Recipe | undefined;
-  @Output() onRecipeSaved = new EventEmitter<void>();
+  @Output() onClose = new EventEmitter<void>();
 
+  editMode: boolean = false;
   recipeForm!: FormGroup;
   cookingEnumOptions = Object.values(CookingEnum);
 
@@ -39,9 +40,9 @@ export class RecipeEditComponent {
 
   initializeForm() {
     this.recipeForm = new FormGroup({
-      name: new FormControl("", Validators.required),
-      style: new FormControl("", Validators.required),
-      time: new FormControl("", [Validators.required, Validators.min(1)]),
+      name: new FormControl(null, Validators.required),
+      style: new FormControl(null, Validators.required),
+      time: new FormControl(null, [Validators.required, Validators.min(1)]),
       ingredients: new FormArray(
         [],
         [Validators.required, this.minLengthArrayValidator(1, "ingredient")]
@@ -50,14 +51,15 @@ export class RecipeEditComponent {
         [],
         [Validators.required, this.minLengthArrayValidator(1, "instruction")]
       ),
-      author: new FormControl(""),
-      created: new FormControl(""),
-      image: new FormControl(""),
-      favorite: new FormControl(""),
-      notes: new FormControl(""),
+      author: new FormControl(null),
+      created: new FormControl(null),
+      image: new FormControl(null),
+      notes: new FormControl(null),
     });
 
     if (this.recipe) {
+      this.editMode = true;
+
       this.recipeForm.patchValue(this.recipe);
       this.recipe.ingredients.forEach((ing) => {
         this.ingredientForms.push(
@@ -101,6 +103,14 @@ export class RecipeEditComponent {
     );
   }
 
+  removeIngredient(index: number) {
+    this.ingredientForms.removeAt(index);
+  }
+
+  removeInstruction(index: number) {
+    this.ingredientForms.removeAt(index);
+  }
+
   minLengthArrayValidator(minLength: number, fieldName: string): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       if (control instanceof FormArray && control.length < minLength) {
@@ -112,11 +122,33 @@ export class RecipeEditComponent {
 
   onSubmit() {
     if (this.recipeForm.valid) {
+      if (this.editMode && this.recipe) {
+        this.dbService
+          .updateRecipe(this.recipe.id, this.buildRecipe())
+          .pipe(untilDestroyed(this))
+          .subscribe(() => {
+            this.onClose.emit();
+          });
+      } else {
+        this.dbService
+          .addRecipe(this.buildRecipe())
+          .pipe(untilDestroyed(this))
+          .subscribe(() => {
+            this.onClose.emit();
+          });
+      }
+    } else {
+      console.log(this.recipeForm);
+    }
+  }
+
+  onDeleteRecipe() {
+    if (this.recipe) {
       this.dbService
-        .addRecipe(this.buildRecipe())
+        .deleteRecipe(this.recipe.id)
         .pipe(untilDestroyed(this))
         .subscribe(() => {
-          this.onRecipeSaved.emit();
+          this.onClose.emit();
         });
     }
   }
@@ -135,7 +167,6 @@ export class RecipeEditComponent {
       author: this.recipeForm.value.author,
       created: Date.now(),
       image: this.recipeForm.value.image,
-      favorite: this.recipeForm.value.favorite,
       notes: this.recipeForm.value.notes,
     } as Recipe;
   }

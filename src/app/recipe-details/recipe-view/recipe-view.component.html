@@ -9,7 +9,7 @@
 
       <button
         class="recipe-like-toggle-btn"
-        [ngClass]="likeToggle() ? 'unlike' : 'like'"
+        [ngClass]="likeToggle() ? 'primary' : 'secondary'"
         (click)="onLikeToggleClick()"
       >
         <ng-container [ngTemplateOutlet]="likeIconRef"></ng-container>

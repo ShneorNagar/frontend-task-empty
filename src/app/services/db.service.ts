@@ -18,7 +18,7 @@ import {
 } from "rxjs";
 
 import { Recipe } from "../models/recipe.interface";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { SnackBarService } from "./snack-bar.service";
 
 @Injectable({
   providedIn: "root",
@@ -26,7 +26,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class DatabaseService {
   private firestore: Firestore = inject(Firestore);
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBarService: SnackBarService) {}
 
   getRecipes(): Observable<Recipe[]> {
     const recipes$ = collectionData(collection(this.firestore, "recipes"), {
@@ -49,7 +49,7 @@ export class DatabaseService {
     ).pipe(
       tap((docRef) => {
         console.log(`Added a new recipe with ID: ${docRef.id}`);
-        this.snackBar.open(`Added a new recipe!`, "OK", { duration: 1500 });
+        this.snackBarService.openSuccessSnackBar(`Added a new recipe!`);
       }),
 
       switchMap((docRef) =>
@@ -58,11 +58,9 @@ export class DatabaseService {
           id: docRef.id,
         })
       ),
-      first(),
       catchError((error) => {
         console.error("Error adding recipe:", error);
-        // todo add class for error snackBar
-        this.snackBar.open(`Error adding recipe`, "OK", { duration: 1500 });
+        this.snackBarService.openErrorSnackBar(`Error adding recipe`);
         return EMPTY;
       })
     );
@@ -74,10 +72,13 @@ export class DatabaseService {
     return from(
       updateDoc(doc(this.firestore, "recipes", id), { ...recipe })
     ).pipe(
-      first(),
-      tap(() => console.log(`Updated recipe with ID: ${id}`)),
+      tap(() => {
+        console.log(`Updated recipe with ID: ${id}`);
+        this.snackBarService.openSuccessSnackBar(`Updated recipe!`);
+      }),
       catchError((error) => {
         console.error(`Error updating recipe with ID: ${id}`, error);
+        this.snackBarService.openErrorSnackBar(`Error updating recipe`);
         return EMPTY;
       })
     );
@@ -87,10 +88,13 @@ export class DatabaseService {
     if (!id) return EMPTY;
 
     return from(deleteDoc(doc(this.firestore, "recipes", id))).pipe(
-      first(),
-      tap(() => console.log(`Removed recipe with ID: ${id}`)),
+      tap(() => {
+        console.log(`Removed recipe with ID: ${id}`);
+        this.snackBarService.openSuccessSnackBar(`Removed recipe!`);
+      }),
       catchError((error) => {
         console.error(`Error removing recipe with ID: ${id}`, error);
+        this.snackBarService.openErrorSnackBar(`Error removing recipe`);
         return EMPTY;
       })
     );
