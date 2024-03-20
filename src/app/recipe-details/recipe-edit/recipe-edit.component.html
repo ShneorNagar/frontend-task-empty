@@ -5,6 +5,12 @@
     <div>
       <label for="name">Name</label>
       <input type="text" formControlName="name" placeholder="Dish name" />
+      <span
+        *ngIf="formSubmitted() && recipeForm.get('name')?.errors?.['required']"
+        class="form-control-error"
+      >
+        Name is required!
+      </span>
     </div>
 
     <div>
@@ -14,6 +20,12 @@
           {{ option }}
         </option>
       </select>
+      <span
+        *ngIf="formSubmitted() && recipeForm.get('style')?.errors?.['required']"
+        class="form-control-error"
+      >
+        Style is required!
+      </span>
     </div>
   </div>
 
@@ -26,6 +38,20 @@
     <div>
       <label for="time">Time (minutes)</label>
       <input type="number" formControlName="time" />
+
+      <span
+        *ngIf="formSubmitted() && recipeForm.get('time')?.errors?.['min']"
+        class="form-control-error"
+      >
+        Time must be grater than 0!
+      </span>
+
+      <span
+        *ngIf="formSubmitted() && recipeForm.get('time')?.errors?.['required']"
+        class="form-control-error"
+      >
+        Time is required!
+      </span>
     </div>
   </div>
 
@@ -50,7 +76,7 @@
 
   <div class="form-control" formArrayName="ingredients">
     <div class="form-control-array-header">
-      <label>Ingredients</label>
+      <label class="form-control-array-label">Ingredients</label>
       <button
         class="add-form-control-btn"
         type="button"
@@ -71,6 +97,13 @@
         </div>
       </li>
     </ul>
+
+    <span
+      *ngIf="formSubmitted() && recipeForm.get('ingredients')?.errors?.['minLengthArray']"
+      class="form-control-error"
+    >
+      At least one ingredient is required!
+    </span>
   </div>
 
   <div class="form-control" formArrayName="instructions">
@@ -96,6 +129,12 @@
         </div>
       </li>
     </ul>
+    <span
+      *ngIf="formSubmitted() && recipeForm.get('instructions')?.errors?.['minLengthArray']"
+      class="form-control-error"
+    >
+      At least one instruction is required!
+    </span>
   </div>
 </form>
 

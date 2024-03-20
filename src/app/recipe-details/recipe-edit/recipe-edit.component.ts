@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+  signal,
+} from "@angular/core";
 import {
   AbstractControl,
   FormArray,
@@ -20,11 +27,13 @@ import { DatabaseService } from "src/app/services/db.service";
   selector: "app-recipe-edit",
   templateUrl: "./recipe-edit.component.html",
   styleUrls: ["./recipe-edit.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipeEditComponent {
   @Input() recipe: Recipe | undefined;
   @Output() onClose = new EventEmitter<void>();
 
+  formSubmitted = signal(false);
   editMode: boolean = false;
   recipeForm!: FormGroup;
   cookingEnumOptions = Object.values(CookingEnum);
@@ -121,6 +130,7 @@ export class RecipeEditComponent {
   }
 
   onSubmit() {
+    this.formSubmitted.set(true);
     if (this.recipeForm.valid) {
       if (this.editMode && this.recipe) {
         this.dbService
