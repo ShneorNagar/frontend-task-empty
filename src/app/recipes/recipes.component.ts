@@ -64,6 +64,7 @@ import { CookingEnum } from "../models/cooking.enum";
 export class RecipesComponent implements OnInit {
   recipes: WritableSignal<Recipe[]> = signal<Recipe[]>([]);
   private originalRecipes: Recipe[] = [];
+  private showFavorites: boolean | null = false;
   selectedRecipe?: Recipe;
 
   showOnlyFavoritesCtrl = new FormControl<boolean>(false);
@@ -79,42 +80,40 @@ export class RecipesComponent implements OnInit {
   constructor(private dbService: DatabaseService) {}
 
   ngOnInit(): void {
-    // this.dbService.addRecipe({
-    //   author: 'Shneor',
-    //   created: Date.now(),
-    //   favorite: false,
-    //   id: "1",
-    //   image: "https://www.recipetineats.com/wp-content/uploads/2022/09/Fries-with-rosemary-salt_1.jpg",
-    //   ingredients: ["1", "2", "3"],
-    //   instructions: ["1", "2", "3"],
-    //   name: "1",
-    //   notes: "1",
-    //   style: CookingEnum.Baking,
-    //   time: 1,
-    // })
+    this.initRecipes();
+    this.initFavoriteToggle();
+  }
+
+  private initRecipes() {
     this.dbService
       .getRecipes()
       .pipe(untilDestroyed(this))
       .subscribe((recipes) => {
         this.recipes.set(recipes);
         this.originalRecipes = recipes;
-
-        // this.originalRecipes.forEach(recipe => {
-        //   this.dbService.deleteRecipe(recipe.id);
-        // })
+        if (this.filterByFavorites !== null) {
+          this.filterByFavorites();
+        }
       });
+  }
 
+  private initFavoriteToggle() {
     this.showOnlyFavoritesCtrl.valueChanges
       .pipe(untilDestroyed(this))
       .subscribe((val) => {
-        if (!!val) {
-          this.recipes.set(
-            this.originalRecipes.filter((r) => r.favorite === val)
-          );
-        } else {
-          this.recipes.set(this.originalRecipes);
-        }
+        this.showFavorites = val;
+        this.filterByFavorites();
       });
+  }
+
+  private filterByFavorites() {
+    if (!!this.showFavorites) {
+      this.recipes.set(
+        this.originalRecipes.filter((r) => r.favorite === this.showFavorites)
+      );
+    } else {
+      this.recipes.set(this.originalRecipes);
+    }
   }
 
   trackByFn(index: number, recipe: Recipe) {
