@@ -42,7 +42,11 @@
       New recipe
     </button>
 
-    <div class="recipes__container" *ngIf="recipes().length">
+    <div
+      [@recipes]="recipes"
+      class="recipes__container"
+      *ngIf="recipes().length"
+    >
       <app-recipe-card
         *ngFor="let recipe of recipes()"
         [recipe]="recipe"
