@@ -30,6 +30,12 @@ label {
 
 .add-form-control-btn {
   @include strokeBtn;
+
+  svg {
+    fill: var(--btn-bg-color);
+    width: 12px;
+    height: 12px;
+  }
 }
 
 .form-control-array-header {
@@ -53,6 +59,15 @@ label {
   align-items: center;
   gap: 8px;
   padding: 12px;
+}
+
+.form-item-remove {
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: #e86161;
+    cursor: pointer;
+  }
 }
 
 #notes {

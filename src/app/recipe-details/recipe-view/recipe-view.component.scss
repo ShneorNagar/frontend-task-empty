@@ -59,11 +59,29 @@
     color: #95949a;
     gap: 4px;
   }
+
+  .recipe-time-icon {
+    fill: #95949a;
+    width: 18px;
+    height: 18px;
+  }
 }
 
 .recipe-data {
   display: grid;
   padding: 32px;
+}
+
+.recipe-favorite-icon {
+  width: 1.4rem;
+  height: 1.4rem;
+  fill: var(--btn-bg-color);
+}
+
+.recipe-like-toggle-btn.primary {
+  .recipe-favorite-icon {
+    fill: #fff;
+  }
 }
 
 .recipe-subtitle {

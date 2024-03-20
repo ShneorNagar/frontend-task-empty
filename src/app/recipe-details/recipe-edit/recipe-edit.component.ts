@@ -17,7 +17,6 @@ import {
   Validators,
 } from "@angular/forms";
 import { UntilDestroy, untilDestroyed } from "@ngneat/until-destroy";
-import { take, tap } from "rxjs";
 import { CookingEnum } from "src/app/models/cooking.enum";
 import { Recipe } from "src/app/models/recipe.interface";
 import { DatabaseService } from "src/app/services/db.service";
@@ -117,38 +116,37 @@ export class RecipeEditComponent {
   }
 
   removeInstruction(index: number) {
-    this.ingredientForms.removeAt(index);
-  }
-
-  minLengthArrayValidator(minLength: number, fieldName: string): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (control instanceof FormArray && control.length < minLength) {
-        return { minLengthArray: { valid: false, fieldName } };
-      }
-      return null;
-    };
+    this.instructionForms.removeAt(index);
   }
 
   onSubmit() {
     this.formSubmitted.set(true);
     if (this.recipeForm.valid) {
-      if (this.editMode && this.recipe) {
-        this.dbService
-          .updateRecipe(this.recipe.id, this.buildRecipe())
-          .pipe(untilDestroyed(this))
-          .subscribe(() => {
-            this.onClose.emit();
-          });
+      if (this.editMode) {
+        this.updateRecipe();
       } else {
-        this.dbService
-          .addRecipe(this.buildRecipe())
-          .pipe(untilDestroyed(this))
-          .subscribe(() => {
-            this.onClose.emit();
-          });
+        this.createRecipe();
       }
-    } else {
-      console.log(this.recipeForm);
+    }
+  }
+
+  private createRecipe() {
+    this.dbService
+      .addRecipe(this.buildRecipe())
+      .pipe(untilDestroyed(this))
+      .subscribe(() => {
+        this.onClose.emit();
+      });
+  }
+
+  private updateRecipe() {
+    if (this.recipe) {
+      this.dbService
+        .updateRecipe(this.recipe.id, this.buildRecipe())
+        .pipe(untilDestroyed(this))
+        .subscribe(() => {
+          this.onClose.emit();
+        });
     }
   }
 
@@ -179,5 +177,17 @@ export class RecipeEditComponent {
       image: this.recipeForm.value.image,
       notes: this.recipeForm.value.notes,
     } as Recipe;
+  }
+
+  private minLengthArrayValidator(
+    minLength: number,
+    fieldName: string
+  ): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (control instanceof FormArray && control.length < minLength) {
+        return { minLengthArray: { valid: false, fieldName } };
+      }
+      return null;
+    };
   }
 }
