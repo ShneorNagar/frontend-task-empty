@@ -1,0 +1,143 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.recipe-image {
+  width: 100%;
+  min-height: 190px;
+  background-size: cover;
+  background-position: center center;
+}
+
+.recipe-header {
+  display: flex;
+  align-items: center;
+
+  .recipe-title {
+    font-family: var(--font-poppins);
+    font-size: 3rem;
+  }
+
+  .recipe-like-toggle-btn {
+    margin: 0 8px 0 auto;
+    border: 1px solid var(--btn-bg-color);
+    border-radius: 24px;
+
+    &.unlike {
+      background-color: #41a4ff;
+      color: #fff;
+
+      & svg > path {
+        fill: #fff;
+      }
+    }
+
+    &.like {
+      background-color: #fff;
+      color: #41a4ff;
+    }
+  }
+
+  .recipe-edit-btn {
+    border: 1px solid var(--btn-bg-color);
+    color: #41a4ff;
+  }
+}
+
+.recipe-author-info {
+  display: flex;
+  font-size: 14px;
+  margin: 0.5rem 0 1rem;
+  justify-content: flex-start;
+  gap: 20px;
+  font-family: Lato, sans-serif;
+}
+
+.recipe-details {
+  display: flex;
+  margin: 1.6rem 0 4rem;
+  justify-content: flex-start;
+  gap: 1rem;
+
+  .recipe-time {
+    display: flex;
+    font-size: 1.4rem;
+    justify-content: center;
+    align-items: center;
+    color: #95949a;
+    gap: 4px;
+  }
+}
+
+.recipe-data {
+  display: grid;
+  padding: 32px;
+}
+
+.recipe-subtitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 2.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.recipe-notes {
+  border-radius: 20px;
+  background: #f6f7f9;
+  padding: 12px;
+  font-size: 14px;
+  margin-bottom: 40px;
+}
+
+.recipe-ingredients {
+  list-style-type: none;
+  border-radius: 2rem;
+  background: #f6f7f9;
+  margin-bottom: 4rem;
+
+  & > li {
+    padding: 12px;
+    font-size: 14px;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #e9e9ea;
+    }
+  }
+}
+
+.recipe-instructions {
+  list-style-type: none;
+
+  li {
+    display: grid;
+    grid-template-columns: min-content auto;
+    align-items: center;
+    justify-items: start;
+    gap: 8px;
+    padding: 16px 0;
+    border-bottom: 1px solid #e9e9ea;
+
+    .recipe-instruction-counter {
+      display: block;
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      text-align: center;
+      border-radius: 50%;
+      color: var(--btn-bg-color);
+      font-weight: 700;
+      background: rgba(65, 164, 255, 0.1);
+      font-size: 14px;
+    }
+
+    .recipe-instruction-item {
+      font-size: 14px;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #e9e9ea;
+    }
+  }
+}

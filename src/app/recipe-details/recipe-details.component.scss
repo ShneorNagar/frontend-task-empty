@@ -1,0 +1,16 @@
+:host {
+  position: relative;
+}
+
+.close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  padding: 5px;
+  border: 1px solid #d5d4d7;
+  background: #fff;
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  cursor: pointer;
+}
