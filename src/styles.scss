@@ -138,16 +138,3 @@ div.mdc-text-field--outlined {
     --mdc-snackbar-container-color: #e86161;
   }
 }
-
-// Mixins
-@mixin strokeBtn() {
-  border: 1px solid var(--btn-bg-color);
-  background-color: #fff;
-  color: var(--btn-bg-color);
-}
-
-@mixin fillBtn() {
-  border: 1px solid var(--btn-bg-color);
-  background-color: var(--btn-bg-color);
-  color: #fff;
-}

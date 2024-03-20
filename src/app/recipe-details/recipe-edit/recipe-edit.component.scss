@@ -7,7 +7,7 @@ h1 {
 }
 
 .recipe-edit-form {
-  padding: 0 32px;
+  padding: 0 32px 64px 32px;
 }
 
 .form-controls-group {
@@ -28,14 +28,10 @@ label {
   margin-bottom: 6px;
 }
 
-.add-form-control-btn {
-  @include strokeBtn;
-
-  svg {
-    fill: var(--btn-bg-color);
-    width: 12px;
-    height: 12px;
-  }
+svg.add-icon {
+  fill: var(--btn-bg-color);
+  width: 12px;
+  height: 12px;
 }
 
 .form-control-array-header {
@@ -85,12 +81,6 @@ label {
   bottom: 0;
   left: 0;
   right: 0;
-}
-
-.submit-btn {
-  @include fillBtn();
-  width: 126px;
-  font-weight: 400;
 }
 
 .form-control-error {

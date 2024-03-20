@@ -78,11 +78,11 @@
     <div class="form-control-array-header">
       <label class="form-control-array-label">Ingredients</label>
       <button
-        class="add-form-control-btn"
+        class="secondary"
         type="button"
         (click)="addIngredient()"
       >
-        <svg>
+        <svg class="add-icon">
           <use xlink:href="../../assets/sprite.svg#icon-add"></use>
         </svg>
         <span>Add</span>
@@ -115,11 +115,11 @@
     <div class="form-control-array-header">
       <label class="form-control-array-label">Instructions</label>
       <button
-        class="add-form-control-btn"
+        class="secondary"
         type="button"
         (click)="addInstruction()"
       >
-        <svg>
+        <svg class="add-icon">
           <use xlink:href="../../assets/sprite.svg#icon-add"></use>
         </svg>
         <span>Add</span>
@@ -149,7 +149,7 @@
 </form>
 
 <footer class="form-footer">
-  <button class="primary" type="submit" (click)="onSubmit()">Save</button>
+  <button class="primary btn-save" type="submit" (click)="onSubmit()">Save</button>
   <button *ngIf="editMode" class="tertiary" (click)="onDeleteRecipe()">
     Delete recipe
   </button>
